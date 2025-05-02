@@ -1,23 +1,28 @@
-// Inputs a library used for user input + output
 use rand::Rng;
+use std::cmp::Ordering;
 use std::io;
 
 fn main() {
-    let secret_number = rand::thread_rng().gen_range(1..=100);
-
     // Self explanatory
     println!("Guess the number!");
+
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+    println!("The secret number is: {secret_number}");
     println!("Please input your guess.");
 
-    // Creates a new, mutable variable 'guess', bound to a function
-    // that returns a new instance of a String
     let mut guess = String::new();
 
     io::stdin()
-        // Takes whatever the user types in
-        // as input, and append that into a string
         .read_line(&mut guess)
         .expect("Failed to read line");
 
+    let guess: u32 = guess.trim().parse().expect("Please type a number!");
+
     println!("You guessed: {guess}");
+
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("Too small!"),
+        Ordering::Greater => println!("Too big!"),
+        Ordering::Equal => println!("You win!"),
+    }
 }
